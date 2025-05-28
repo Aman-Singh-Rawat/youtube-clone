@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youtube_clone/cores/screens/loader.dart';
 import 'package:youtube_clone/features/auth/pages/login_page.dart';
 import 'package:youtube_clone/firebase_options.dart';
+import 'package:youtube_clone/home_page.dart';
 
 import 'features/auth/pages/username_page.dart';
 
@@ -68,12 +69,7 @@ class MyApp extends StatelessWidget {
                 return Loader();
               }
 
-              return Container(
-                color: Colors.white,
-                child: Center(
-                  child: Text('working', style: TextStyle(color: Colors.black)),
-                ),
-              );
+              return HomePage();
             },
           );
         },
