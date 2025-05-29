@@ -1,8 +1,13 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:youtube_clone/cores/screens/loader.dart';
 import 'package:youtube_clone/cores/widgets/image_button.dart';
+import 'package:youtube_clone/features/auth/provider/user_provider.dart';
+
+import 'cores/screens/error_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -16,10 +21,7 @@ class HomePage extends StatelessWidget {
           children: [
             Row(
               children: [
-                Image.asset(
-                  "assets/images/youtube.jpg",
-                  height: 36,
-                ),
+                Image.asset("assets/images/youtube.jpg", height: 36),
                 const SizedBox(width: 4),
                 const Spacer(),
                 Padding(
@@ -52,14 +54,25 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Consumer(builder: (context, ref, child) {
-                  ref.watch(provider)
-                },),
-                Padding(padding: const EdgeInsets.only(right: 12),
-                child: CircleAvatar(
-                  radius: 14,
-                  backgroundColor: Colors.grey,
-                ),)
+                Consumer(
+                  builder: (context, ref, child) {
+                    return ref
+                        .watch(currentUserProvider)
+                        .when(
+                          data:
+                              (currentUser) => Padding(
+                                padding: const EdgeInsets.only(right: 12),
+                                child: CircleAvatar(
+                                  radius: 14,
+                                  backgroundColor: Colors.grey,
+                                  backgroundImage: CachedNetworkImageProvider(currentUser.profilePicture),
+                                ),
+                              ),
+                          error: (error, stackTrace) => const ErrorPage(),
+                          loading: () => const Loader(),
+                        );
+                  },
+                ),
               ],
             ),
           ],

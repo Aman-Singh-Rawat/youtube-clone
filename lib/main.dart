@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youtube_clone/cores/screens/loader.dart';
 import 'package:youtube_clone/features/auth/pages/login_page.dart';
+import 'package:youtube_clone/features/channel/my_channel/pages/my_channel_screen.dart';
 import 'package:youtube_clone/firebase_options.dart';
 import 'package:youtube_clone/home_page.dart';
 
@@ -62,14 +63,14 @@ class MyApp extends StatelessWidget {
               if (!snapshot.hasData || !snapshot.data!.exists) {
                 return UsernamePage(
                   displayName: user.displayName!,
-                  email: user.photoURL!,
-                  profilePic: user.email!,
+                  email: user.email!,
+                  profilePic: user.photoURL!,
                 );
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return Loader();
               }
 
-              return HomePage();
+              return MyChannelScreen();
             },
           );
         },
