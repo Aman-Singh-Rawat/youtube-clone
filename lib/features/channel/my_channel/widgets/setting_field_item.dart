@@ -7,11 +7,11 @@ class SettingsItem extends StatelessWidget {
   final String value;
 
   const SettingsItem({
-    Key? key,
+    super.key,
     required this.identifier,
     required this.onPressed,
     required this.value,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,110 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:youtube_clone/cores/colors.dart';
+import 'package:youtube_clone/cores/screens/error_page.dart';
+import 'package:youtube_clone/cores/screens/loader.dart';
 import 'package:youtube_clone/cores/widgets/image_button.dart';
+import 'package:youtube_clone/features/auth/provider/user_provider.dart';
+import 'package:youtube_clone/features/channel/my_channel/parts/TabPages.dart';
+import 'package:youtube_clone/features/channel/my_channel/parts/buttons.dart';
+import 'package:youtube_clone/features/channel/my_channel/parts/tab_bar.dart';
+import 'package:youtube_clone/features/channel/my_channel/parts/top_header.dart';
 
-class MyChannelScreen extends StatelessWidget {
+class MyChannelScreen extends ConsumerWidget {
   const MyChannelScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 7,
-      child: Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              children: [
-                Center(
-                  child: CircleAvatar(radius: 38, backgroundColor: Colors.grey),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 4),
-                  child: Text(
-                    'Aman Singh',
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 9),
-                  child: RichText(
-                    text: TextSpan(
-                      style: TextStyle(color: Colors.blueGrey),
-                      children: [
-                        TextSpan(text: '@aman-sing '),
-                        TextSpan(text: 'No subscription '),
-                        TextSpan(text: 'No videos'),
-                      ],
-                    ),
-                  ),
-                ),
-                const Text('More about this channel'),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          height: 41,
-                          decoration: BoxDecoration(
-                            color: softBlueGreyBackGround,
-                            borderRadius: BorderRadius.all(Radius.circular(9)),
-                          ),
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Manage Videos',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: ImageButton(
-                          onPressed: () {},
-                          image: 'pen.png',
-                          haveColor: true,
-                        ),
-                      ),
-                      Expanded(
-                        child: ImageButton(
-                          onPressed: () {},
-                          image: 'time-watched.png',
-                          haveColor: true,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref
+        .watch(currentUserProvider)
+        .when(
+          data:
+              (currentUser) => DefaultTabController(
+                length: 7,
+                child: Scaffold(
+                  body: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Column(
+                        children: [
+                          // top header
+                          TopHeader(user: currentUser,),
 
-                // create tab bar
-                Padding(
-                  padding: const EdgeInsets.only(top: 14.0),
-                  child: TabBar(
-                    isScrollable: true,
-                    labelStyle: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
+                          const Text('More about this channel'),
+                          Buttons(),
+
+                          // create tab bar
+                          PageTabBar(),
+
+                          TabPages(),
+                        ],
+                      ),
                     ),
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicatorPadding: const EdgeInsets.only(top: 12),
-                    tabs: [
-                      Text('Home'),
-                      Text('Videos'),
-                      Text('shorts'),
-                      Text('community'),
-                      Text('playlists'),
-                      Text('channels'),
-                      Text('about'),
-                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+              ),
+          error: (error, stackTrace) => const ErrorPage(),
+          loading: () => const Loader(),
+        );
   }
 }

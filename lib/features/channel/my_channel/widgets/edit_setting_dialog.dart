@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 class SettingsDialog extends StatefulWidget {
   final String identifier;
   final Function(String channelName)? onSave;
-  const SettingsDialog({
-    Key? key,
-    required this.identifier,
-    this.onSave,
-  }) : super(key: key);
+
+  const SettingsDialog({Key? key, required this.identifier, this.onSave})
+    : super(key: key);
 
   @override
   State<SettingsDialog> createState() => _SettingsDialogState();
@@ -16,6 +14,7 @@ class SettingsDialog extends StatefulWidget {
 
 class _SettingsDialogState extends State<SettingsDialog> {
   final controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -24,10 +23,7 @@ class _SettingsDialogState extends State<SettingsDialog> {
         padding: const EdgeInsets.only(left: 22, top: 8),
         child: Text(
           widget.identifier,
-          style: const TextStyle(
-            fontSize: 15,
-            color: Colors.black,
-          ),
+          style: const TextStyle(fontSize: 15, color: Colors.black),
         ),
       ),
       content: SizedBox(
@@ -36,27 +32,24 @@ class _SettingsDialogState extends State<SettingsDialog> {
           controller: controller,
           decoration: const InputDecoration(
             border: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.blue,
-              ),
+              borderSide: BorderSide(color: Colors.blue),
             ),
           ),
         ),
       ),
       actions: [
         TextButton(
-          onPressed: () {},
-          child: const Text(
-            "CANCEL",
-            style: TextStyle(color: Colors.black),
-          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text("CANCEL", style: TextStyle(color: Colors.black)),
         ),
         TextButton(
-          onPressed: () {},
-          child: const Text(
-            "SAVE",
-            style: TextStyle(color: Colors.black),
-          ),
+          onPressed: () {
+            widget.onSave!(controller.text);
+            Navigator.of(context).pop();
+          },
+          child: const Text("SAVE", style: TextStyle(color: Colors.black)),
         ),
       ],
     );
